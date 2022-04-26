@@ -80,6 +80,24 @@
 			}
 		}
 		
+		public function get_all_teacher_classes()
+		{
+			try {
+				$this->db->select('*');
+				$this->db->where([
+					'teacher_id' => $this->session->userdata['logged_in']['user_id'],
+				]);
+				$this->db->order_by('id', 'ASC');
+				$this->db->from('tbl_classes');
+				
+				$query = $this->db->get();
+			
+				return $query->result_array();
+			} catch (Exception $ex) {
+				return [];
+			}
+		}
+		
 		public function delete_class($id)
 		{
 			try {

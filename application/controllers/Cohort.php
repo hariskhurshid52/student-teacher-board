@@ -20,7 +20,7 @@
 			if ($this->session->has_userdata('logged_in')) {
 				$data = [];
 				$this->load->model('CohortModel');
-				$data['cohorts'] = $this->CohortModel->get_all_cohort();
+				$data['cohorts'] = $this->CohortModel->get_all_teacher_cohort();
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/cohort/view_cohort_list');
 				$this->load->view('teachers/common/footer');
@@ -81,7 +81,8 @@
 					
 					$response = $this->CohortModel->save_cohort([
 						'cohort_name' => $inputs['name'],
-						'status' => 'active'
+						'status' => 'active',
+						'teacher_id' => $this->session->userdata['logged_in']['user_id'],
 					]);
 					if ($response) {
 						ajax_response(['status' => 'success']);

@@ -17,15 +17,17 @@
 
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-striped table-bordered" cellspacing="0" data-provide="datatables">
+                    <table class="table table-striped table-bordered std-table" cellspacing="0" data-provide="datatabless">
                         <thead>
                         <tr>
+                            <th></th>
                             <th></th>
                             <th>Name</th>
                             <th>Username</th>
                             <th>Email</th>
                             <th>Status</th>
                             <th>Class Name</th>
+                            <th>Last Login</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -39,6 +41,7 @@
                                       </span>
                                     </a>
                                 </td>
+                                <td><?= $student['id'] ?></td>
                                 <td><?= $student['name'] ?></td>
                                 <td><?= $student['username'] ?></td>
                                 <td><?= $student['email'] ?></td>
@@ -52,6 +55,7 @@
                                     </label>
                                 </td>
                                 <td><?= $student['class_name'] ?></td>
+                                <td><span class="badge badge-info"> <?= !empty($student['last_login']) ? date('Y-m-d h:i:s',strtotime($student['last_login'])) : '*****' ?></span></td>
                                 <td>
                                     <a class="dropdown-item" href="<?= base_url('edit-student/') . $student['id'] ?>"><i
                                                 class="fa fa-fw fa-pencil"></i> Edit</a>

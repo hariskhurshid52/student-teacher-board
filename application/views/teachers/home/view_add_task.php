@@ -1,5 +1,17 @@
 <main>
-	
+    <header class="header bg-ui-general mt-5">
+        <div class="header-info">
+            <h1 class="header-title">
+                <strong>Task's</strong> list
+                <small>Here you can find details of all tasks & add new</small>
+            </h1>
+        </div>
+        <div class="header-action">
+            <nav class="nav">
+                <a class="nav-link active" href="#" onclick="showAllTasks()">Show Tasks</a>
+            </nav>
+        </div>
+    </header>
 	<div class="main-content">
 		<div class="row  center-vh p-0 m-0">
 			<div class="col-md-12">

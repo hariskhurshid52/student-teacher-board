@@ -643,6 +643,10 @@
         </script>
 	<?php endif; ?>
 	<?php if ($this->router->method === 'students'): ?>
+       
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js" charset="utf-8"></script>
+
         <script>
             $(document).ready(() => {
                 $(".check-student-status").change((e) => {
@@ -682,6 +686,29 @@
                             }
                         })
                     }
+                })
+                
+                $(".std-table").DataTable({
+                    "lengthMenu": [[100, 25, 50, -1], [100, 25, 50, "All"]],
+                    dom: 'lBrftip',
+                    buttons: [
+                        {
+                            className: 'btn btn-xs btn-primary ',
+                            titleAttr: "All",
+                            text: "All",
+                            action: function (e, dt, node, config) {
+                                window.location.href='<?=base_url('students')?>';
+                            }
+                        },
+                        {
+                            className: 'btn btn-xs btn-info ',
+                            titleAttr: "Recent Added",
+                            text: "Recent Added",
+                            action: function (e, dt, node, config) {
+                                window.location.href='<?=base_url('students')?>?query=recent';
+                            }
+                        }
+                    ],
                 })
             })
 
@@ -833,7 +860,19 @@
                     }
                 })
             })
-
+            
+            function showAllTasks(){
+                app.modaler({
+                    url: `<?=base_url('task-list-content')?>`,
+                    type: 'center',
+                    size: 'lg',
+                    title: 'Task List',
+                    confirmVisible: false,
+                    onCancel: function (modal) {
+                        app.toast('You canceled it!');
+                    }
+                });
+            }
             
         </script>
 	<?php endif; ?>

@@ -66,7 +66,7 @@
 				}
 				
 				$this->load->model('CohortModel');
-				$response = $this->CohortModel->get_all_cohort();
+				$response = $this->CohortModel->get_all_teacher_cohort();
 				$cohorts = [];
 				foreach ($response as $c){
 					$cohorts[$c['id']]=$c;
@@ -96,7 +96,7 @@
 			
 				
 				$this->load->model('CohortModel');
-				$response = $this->CohortModel->get_all_cohort();
+				$response = $this->CohortModel->get_all_teacher_cohort();
 				$cohorts = [];
 				foreach ($response as $c){
 					$cohorts[$c['id']]=$c;
@@ -107,7 +107,7 @@
 				$data['students'] = $this->students->get_all_students();
 				
 				$this->load->model('classes');
-				$data['classes'] = $this->classes->get_all_classes();
+				$data['classes'] = $this->classes->get_all_teacher_classes();
 				
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/home/view_add_task');
@@ -154,6 +154,7 @@
 							}
 							$this->session->set_userdata('logged_in', [
 								'user_id' => $response[0]['id'],
+								'role' => 'teacher',
 								'name' => "{$response[0]['firstname']} {$response[0]['lastname']}",
 							]);
 							ajax_response(['status' => 'success']);
@@ -298,6 +299,7 @@
 						'student_id'=>$inputs['student'],
 						'cohort_id'=>$inputs['cohort'],
 						'class_id'=>$inputs['class'],
+						'added_by'=>$this->session->userdata['logged_in']['user_id'],
 						'completion_level'=>$inputs['completion_level'],
 					];
 					$response = $this->teachers->save_task($task_data);
@@ -431,7 +433,11 @@
 			if ($this->session->has_userdata('logged_in')) {
 				$data = [];
 				$this->load->model('students');
-				$data['students'] = $this->students->get_all_students();
+				$order="asc";
+				if($this->input->get('query') == "recent"){
+					$order="desc";
+				}
+				$data['students'] = $this->students->get_teacher_students_list($order);
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/view_students_grid');
 				$this->load->view('teachers/common/footer');
@@ -445,7 +451,7 @@
 			if ($this->session->has_userdata('logged_in')) {
 				$data = [];
 				$this->load->model('classes');
-				$data['classes'] = $this->classes->get_all_classes();
+				$data['classes'] = $this->classes->get_all_teacher_classes();
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/view_upload_class_work');
 				$this->load->view('teachers/common/footer');
@@ -556,6 +562,26 @@
 			}
 		}
 		
+		public function task_list_content()
+		{
+			if ($this->session->has_userdata('logged_in')) {
+				$this->load->model('teachers');
+				$data = [];
+				$response = $this->teachers->get_teacher_added_tasks();
+				
+				if (!empty($response)) {
+					$data['tasks'] = $response;
+					
+					$this->load->view('teachers/view_task_list_content', $data);
+				} else {
+					echo "<p class='text-danger font-weight-bold text-center'>No task found</p>";
+				}
+				
+			} else {
+				echo "<p class='text-danger font-weight-bold text-center'>You are not authorised to update profile. Please login</p>";
+			}
+		}
+		
 		
 		public function update_student_status()
 		{
@@ -618,5 +644,54 @@
 			} else {
 				ajax_response(['status' => 'loginerr']);
 			}
+		}
+		
+		public function teacher_registration()
+		{
+			$data=[];
+			if($this->input->post() !== NULL){
+				$message = 'Failed to register account';
+				$inputs = $this->input->post();
+				if(empty($inputs['firstname']) || empty($inputs['lastname']) || empty($inputs['username']) || empty($inputs['password']) || empty($inputs['phonenumber']) || empty($inputs['address'])){
+					$message  = "Validation Error. Fill All Fields Carefully";
+				}
+				else if($inputs['password'] !==$inputs['password-conf']){
+					$message="Password Donot Match";
+				}
+				else{
+					$this->load->model('teachers');
+					$response = $this->teachers->get_teacher_by_username($inputs['username']);
+					
+					if (count($response) > 0) {
+						$message = "Username already exists";
+					}
+					else{
+						$insData=[
+							'username'=>$inputs['username'],
+							'password'=>$inputs['password'],
+							'firstname'=>$inputs['firstname'],
+							'middlename'=>$inputs['middlename'],
+							'lastname'=>$inputs['lastname'],
+							'address'=>$inputs['address'],
+							'phonenmber'=>$inputs['phonenumber'],
+							'added_date'=>date('Y-m-d\Th:i:s.v\Z', strtotime('now')),
+						];
+						
+						
+						
+						
+						$response = $this->teachers->register_teacher($insData);
+						viewResults($response);
+						if($response){
+							redirect('login');
+						}
+						
+						
+					}
+					$this->session->set_flashdata('message', $message);
+				}
+			}
+			$this->load->view('teachers/view_teacher_registration');
+			
 		}
 	}

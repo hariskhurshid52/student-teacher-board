@@ -27,6 +27,19 @@
 			//$this->db->close();
 			return $query->result_array();
 		}
+		public function get_teacher_by_username($user_name)
+		{
+			$this->db->select('*');
+			$this->db->where([
+				'username' => trim($user_name),
+				
+			]);
+			$this->db->from('tbl_teachers');
+			$this->db->limit(1);
+			$query = $this->db->get();
+			//$this->db->close();
+			return $query->result_array();
+		}
 		public function get_last_publication($cohort)
 		{
 			try{
@@ -203,6 +216,16 @@
 				return  false;
 			}
 		}
+		public function register_teacher($data)
+		{
+			try{
+				$this->db->insert('tbl_teachers', $data);
+				return  true;
+			}
+			catch (Exception $ex){
+				return  false;
+			}
+		}
 		
 		public function update_board_labels($data,$cohort)
 		{
@@ -243,6 +266,7 @@
 				return false;
 			}
 		}
+		
 		public function get_board_labels($cohort)
 		{
 			try{
@@ -260,6 +284,25 @@
 				e;
 			}
 			catch (Exception $ex){
+				return [];
+			}
+		}
+		
+		public function get_teacher_added_tasks()
+		{
+			try {
+				$this->db->select('tbl_tasks.*,tbl_students.name student_name,tbl_cohorts.cohort_name cohort_name,tbl_classes.name class_name');
+				$this->db->where([
+					'tbl_tasks.teacher_id' => $this->session->userdata['logged_in']['user_id'],
+				]);
+				$this->db->join('tbl_students', 'tbl_students.id = tbl_tasks.student_id','LEFT');
+				$this->db->join('tbl_cohorts', 'tbl_cohorts.id = tbl_tasks.cohort_id','LEFT');
+				$this->db->join('tbl_classes', 'tbl_classes.id = tbl_tasks.class_id','LEFT');
+				$this->db->order_by('id', 'desc');
+				$this->db->from('tbl_tasks');
+				$query = $this->db->get();
+				return $query->result_array();
+			} catch (Exception $ex) {
 				return [];
 			}
 		}

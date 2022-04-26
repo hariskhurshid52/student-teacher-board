@@ -103,8 +103,13 @@
 					<button class="btn btn-bold btn-block btn-primary button-login" type="submit">Login</button>
 				</div>
 			</div>
-			
-			
+
+            <div class="divider">Or Register Your Account</div>
+            <div class="text-center">
+                <a id="new-teacher"  class="btn btn-info" href="<?=base_url('teacher/registration')?>"><i class="fa fa-plus"></i> Register
+                    Account
+                </a>
+            </div>
 			
 			<hr class="w-30px">
 			

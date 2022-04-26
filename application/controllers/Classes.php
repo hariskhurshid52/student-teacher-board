@@ -20,7 +20,7 @@
 			if ($this->session->has_userdata('logged_in')) {
 				$data = [];
 				$this->load->model('classes');
-				$data['classes'] = $this->classes->get_all_classes();
+				$data['classes'] = $this->classes->get_all_teacher_classes();
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/classes/view_classes_list');
 				$this->load->view('teachers/common/footer');
