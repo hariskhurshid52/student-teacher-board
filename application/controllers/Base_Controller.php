@@ -326,5 +326,16 @@
 			
 		}
 		
+		public function e_learning()
+		{
+			$data = [];
+			
+			
+			$this->load->view('students/common/header', $data);
+			$this->load->view('students/home/view_elearning');
+			$this->load->view('students/common/footer');
+			
+		}
+		
 		
 	}

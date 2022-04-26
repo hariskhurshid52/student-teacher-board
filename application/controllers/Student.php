@@ -65,6 +65,13 @@
 				redirect('https://student.amasomo.com/login');
 			}
 			
+			
+			$labels = $this->students->get_board_labels();
+			if(!empty($labels)){
+				$data['board_labels'] = json_decode($labels->labels_string,true);
+			}
+			
+			
 			$this->load->view('students/common/header', $data);
 			$this->load->view('students/home/view_main_board');
 			$this->load->view('students/common/footer');
@@ -81,6 +88,52 @@
 			$this->load->view('students/common/header', $data);
 			$this->load->view('students/view_students_grid');
 			$this->load->view('students/common/footer');
+			
+		}
+		
+		public function tasks()
+		{
+			$data = [];
+			$this->load->model('students');
+		
+			$class = $this->session->userdata['logged_in']['class_id'];
+			$cohort = $this->session->userdata['logged_in']['cohort'];
+			$student = $this->session->userdata['logged_in']['user_id'];
+			$data['tasks'] = $this->students->get_all_assigned_tasks($class,$cohort,$student);
+			
+			$completed_tasks_list = $this->students->get_all_completed_tasks();
+			$completed_tasks=[];
+			
+			foreach ($completed_tasks_list as $task){
+				$completed_tasks[$task['task_id']]  =$task;
+			}
+			$data['completed_tasks'] =$completed_tasks;
+		
+			$this->load->view('students/common/header', $data);
+			$this->load->view('students/view_tasks_list');
+			$this->load->view('students/common/footer');
+			
+		}
+		public function update_tasks()
+		{
+			$inputs = $this->input->post();
+			
+			if(!empty($inputs['tasks'])){
+				$this->load->model('students');
+				foreach ($inputs['tasks'] as $task){
+					$task_data=[
+						'task_id'=>$task,
+						'completed_date'=> date('Y-m-d\Th:i:s.v\Z', strtotime('now')),
+						'student_id'=>$this->session->userdata['logged_in']['user_id'],
+					];
+					
+					$response = $this->students->update_task($task_data);
+				}
+				ajax_response(['status' => 'success']);
+			}
+			else{
+				ajax_response(['status' => 'error']);
+			}
 			
 		}
 		

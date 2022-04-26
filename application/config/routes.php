@@ -60,6 +60,7 @@
 		$route['upload-work'] = 'teacher/upload_work';
 		$route['clear-board'] = 'teacher/clear_data';
 		$route['upload-book'] = 'teacher/upload_book';
+		$route['update-board-label'] = 'teacher/update_board_labels';
 	
 		$route['save-student'] = 'teacher/save_student';
 		$route['upload-file'] = 'teacher/upload_file';
@@ -84,6 +85,9 @@
 		$route['save-cohort'] = 'Cohort/save_cohort';
 		$route['update-cohort'] = 'Cohort/update_cohort';
 		
+		$route['add-tasks'] = 'teacher/add_task';
+		$route['save-task'] = 'teacher/save_task';
+		
 		
 		
 		
@@ -98,7 +102,10 @@
 		$route['validate-email'] = 'student/validate_email';
 		$route['update-password'] = 'student/update_password';
 		$route['library'] = 'student/library';
+		
 		$route['class-work'] = 'student/my_class_work';
+		$route['tasks'] = 'student/tasks';
+		$route['update-tasks'] = 'student/update_tasks';
 		
 	}
 	$route['student-reg-content'] = 'Base_Controller/get_student_reg_form';
@@ -110,3 +117,4 @@
 	$route['terms-conditions'] = 'Base_Controller/terms_conditions';
 	$route['privacy'] = 'Base_Controller/privacy_policy';
 	$route['logout'] = 'Base_Controller/logout';
+	$route['e-learning'] = 'Base_Controller/e_learning';

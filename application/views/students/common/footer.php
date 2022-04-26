@@ -14,6 +14,7 @@
 <script src="<?= base_url() ?>/assets/theme/assets/js/script.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
 
+
 <?php if ($this->router->class == 'student'): ?>
     <script>
         $(".edit-profile").click(()=>{
@@ -371,6 +372,55 @@
                     $(".preloader ").css('display', 'none');
                     $('#classwork').summernote('disable')
                 },300)
+            })
+
+
+        </script>
+	<?php endif; ?>
+	<?php if ($this->router->method === 'tasks'): ?>
+        <script>
+            $(document).ready(() => {
+                $(".preloader ").css('display', '');
+                setTimeout(()=>{
+                    $(". ").css('display', 'none');
+                    $('#classwork').summernote('disable')
+                },300)
+
+                $("#update_tasks").click(()=>{
+                    if($("input[name=task_list]:checked").length == 0){
+                        app.toast('Tasks cannot be empty', {
+                            actionTitle: 'Failed',
+                            actionColor: 'danger'
+                        });
+                    }else {
+                        $(".preloader ").css('display', '');
+                        $.ajax({
+                            url: `<?=base_url('update-tasks')?>`,
+                            type: 'POST',
+                            data: {
+                                tasks: $.map($('input[name="task_list"]:checked:not(:disabled)'), function(c){return c.value })
+                            },
+                            success: function (response) {
+                                response = JSON.parse(response);
+                                $(".preloader ").css('display', 'none');
+                                if (response.status == "success") {
+                                    app.toast('Successfully updated task', {
+                                        actionColor: 'success'
+                                    });
+
+                                } else {
+                                    app.toast('Failed to update tasks', {
+                                        actionTitle: 'Failed',
+                                        actionColor: 'danger'
+                                    });
+                                }
+                                window.location.reload()
+
+
+                            }
+                        })
+                    }
+                })
             })
 
 

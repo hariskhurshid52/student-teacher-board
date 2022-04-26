@@ -62,6 +62,7 @@
 							];
 						}
 					}
+					$this->session->set_userdata('active_cohort', $cohort);
 				}
 				
 				$this->load->model('CohortModel');
@@ -71,8 +72,45 @@
 					$cohorts[$c['id']]=$c;
 				}
 				$data['cohorts']=$cohorts;
+				
+				$labels = $this->teachers->get_board_labels($cohort);
+				if(!empty($labels)){
+					$data['board_labels'] = json_decode($labels->labels_string,true);
+				}
+				
 				$this->load->view('teachers/common/header', $data);
 				$this->load->view('teachers/home/view_main_panel');
+				$this->load->view('teachers/common/footer');
+			} else {
+				redirect('login', 'refresh');
+			}
+		}
+		
+		public function add_task()
+		{
+			if ($this->session->has_userdata('logged_in')) {
+				$data = [
+				
+				];
+				$this->load->model('teachers');
+			
+				
+				$this->load->model('CohortModel');
+				$response = $this->CohortModel->get_all_cohort();
+				$cohorts = [];
+				foreach ($response as $c){
+					$cohorts[$c['id']]=$c;
+				}
+				$data['cohorts']=$cohorts;
+				
+				$this->load->model('students');
+				$data['students'] = $this->students->get_all_students();
+				
+				$this->load->model('classes');
+				$data['classes'] = $this->classes->get_all_classes();
+				
+				$this->load->view('teachers/common/header', $data);
+				$this->load->view('teachers/home/view_add_task');
 				$this->load->view('teachers/common/footer');
 			} else {
 				redirect('login', 'refresh');
@@ -248,6 +286,30 @@
 			
 		}
 		
+		public function save_task()
+		{
+			$inputs = $this->input->post();
+			if(!empty($inputs['tasks'])){
+				$this->load->model('teachers');
+				foreach ($inputs['tasks'] as $task){
+					$task_data=[
+						'task_name'=>$task,
+						'added_date'=> date('Y-m-d\Th:i:s.v\Z', strtotime('now')),
+						'student_id'=>$inputs['student'],
+						'cohort_id'=>$inputs['cohort'],
+						'class_id'=>$inputs['class'],
+						'completion_level'=>$inputs['completion_level'],
+					];
+					$response = $this->teachers->save_task($task_data);
+				}
+				ajax_response(['status' => 'success']);
+			}
+			else{
+				ajax_response(['status' => 'error']);
+			}
+			
+		}
+		
 		public function clear_data()
 		{
 			
@@ -255,7 +317,7 @@
 				$this->load->model('teachers');
 				$this->session->unset_tempdata('cache');
 				unset($this->session->userdata['cache']);
-				$publications = $this->teachers->get_last_publication();
+				$publications = $this->teachers->get_last_publication($this->session->userdata['active_cohort']);
 				if (count($publications) > 0) {
 					$publications_id = $publications[0]['id'];
 					$publications = $this->teachers->update_publication([
@@ -279,7 +341,7 @@
 			if ($this->session->has_userdata('logged_in')) {
 				$inputs = $this->input->post();
 				$this->load->model('teachers');
-				$publications = $this->teachers->get_last_publication();
+				$publications = $this->teachers->get_last_publication($this->session->userdata['active_cohort']);
 				if (count($publications) > 0) {
 					$inputs = $this->input->post();
 					$config['upload_path'] = FCPATH . 'assets/uploaded_files/';
@@ -299,6 +361,7 @@
 					} else {
 						$upload_data = $this->upload->data();
 						$this->session->set_flashdata('uploaded_file', $upload_data['file_name']);
+						
 						if ($inputs['section'] == "weekly_lessons") {
 							$response = $this->teachers->update_weekly_lessons([
 								'document_path' => $upload_data['file_name'],
@@ -316,9 +379,7 @@
 								'document_path' => $upload_data['file_name'],
 							], $publications[0]['id']);
 						}
-						if ($response) {
-							$message = 'Document Uploaded Successfully';
-						}
+						$message = 'Document Uploaded Successfully';
 						
 					}
 				} else {
@@ -327,7 +388,7 @@
 				
 				$this->session->set_flashdata('message', $message);
 			
-				redirect('/', 'refresh');
+				redirect('home/'.$this->session->userdata['active_cohort'], 'refresh');
 				
 			} else {
 				redirect('login', 'refresh');
@@ -495,6 +556,7 @@
 			}
 		}
 		
+		
 		public function update_student_status()
 		{
 			$inputs = $this->input->post();
@@ -532,5 +594,29 @@
 				ajax_response(['status' => 'validation', 'msg' => 'Failed to delete student']);
 			}
 			
+		}
+		
+		public function update_board_labels()
+		{
+			if ($this->session->has_userdata('logged_in')) {
+				$inputs=$this->input->post();
+				if(!empty($inputs['field']) && !empty($inputs['value']) && !empty($inputs['cohort'])){
+					
+					$data=[
+						$inputs['field'] =>$inputs['value']
+					];
+					$this->load->model('teachers');
+					$response = $this->teachers->update_board_labels($data,$inputs['cohort']);
+					if ($response) {
+						ajax_response(['status' => 'success']);
+						
+					}
+				}
+				ajax_response(['status' => 'validation', 'msg' => 'Validation Error found']);
+				
+				
+			} else {
+				ajax_response(['status' => 'loginerr']);
+			}
 		}
 	}

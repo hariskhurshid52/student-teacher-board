@@ -205,6 +205,38 @@
 			}
 		}
 		
+		public function get_all_assigned_tasks($class,$cohort,$student)
+		{
+			try {
+			
+				$this->db->select('*');
+				$this->db->from('tbl_tasks');
+				$where = "class_id = $class OR cohort_id = $cohort OR student_id = $student ";
+				$this->db->where($where);
+				$this->db->order_by('id', 'DESC');
+				$query = $this->db->get();
+				return $query->result_array();
+			} catch (Exception $exception) {
+				return false;
+			}
+		}
+		public function get_all_completed_tasks()
+		{
+			try {
+			
+				$this->db->select('*');
+				$this->db->from('tbl_completed_tasks');
+				$this->db->where([
+					'student_id' => $this->session->userdata['logged_in']['user_id']
+				]);
+				$this->db->order_by('id', 'DESC');
+				$query = $this->db->get();
+				return $query->result_array();
+			} catch (Exception $exception) {
+				return false;
+			}
+		}
+		
 		
 		public function save_student($data)
 		{
@@ -213,6 +245,38 @@
 				return $this->db->insert_id();
 			} catch (Exception $ex) {
 				return false;
+			}
+		}
+		
+		public function update_task($data)
+		{
+			try {
+				$this->db->insert('tbl_completed_tasks', $data);
+				return $this->db->insert_id();
+			} catch (Exception $ex) {
+				return false;
+			}
+		}
+		
+		
+		public function get_board_labels()
+		{
+			try{
+				
+				$this->db->select('*');
+				$this->db->where([
+					'cohort_id' => $this->session->userdata['logged_in']['cohort'],
+				]);
+				$this->db->from('tbl_board_labels');
+				$this->db->limit(1);
+				$query = $this->db->get();
+				//$this->db->close();
+				return $query->row();
+				
+				e;
+			}
+			catch (Exception $ex){
+				return [];
 			}
 		}
 	}

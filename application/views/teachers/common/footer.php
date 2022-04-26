@@ -12,6 +12,7 @@
 <script src="<?= base_url() ?>/assets/theme/assets/js/core.min.js" data-provide="sweetalert"></script>
 <script src="<?= base_url() ?>/assets/theme/assets/js/app.min.js"></script>
 <script src="<?= base_url() ?>/assets/theme/assets/js/script.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js" ></script>
 <script>
 	<?php if(!empty($this->session->flashdata('message'))): ?>
     app.toast('<?=$this->session->flashdata('message')?>', {
@@ -379,10 +380,62 @@
                         window.board.editors[$(this).attr('section')][$(this).attr('component')] = _iDe
                     });
                 }
-                $("#cohort_list").change(()=>{
+                $("#cohort_list").click(()=>{
                     if($("#cohort_list").val() !== "" && $("#cohort_list").val() != undefined){
                         window.location.href=`<?=base_url('home/')?>${$("#cohort_list").val()}`
                     }
+                })
+                $(".board-label").click((e)=>{
+                    let _elem=$(e.currentTarget),
+                        _label=_elem.attr('board-label-for');
+                    if(_label !== ""){
+                        if($(`input[board-label=${_label}]`).val() !== ""){
+                            $(".preloader ").css('display', 'flex');
+                            $.ajax({
+                                url: `<?=base_url('update-board-label')?>`,
+                                type: 'POST',
+                                data: {
+                                    value:$(`input[board-label=${_label}]`).val(),
+                                    field:_label,
+                                    cohort:'<?=$selected_cohort?>'
+                                },
+                                success: function (response) {
+                                    response = JSON.parse(response);
+                                    $(".preloader ").css('display', 'none');
+                                    if (response.status == "success") {
+                                        app.toast('Successfully updated label', {
+                                            actionTitle: 'Success',
+                                            actionUrl: '<?=base_url('/')?>',
+                                            actionColor: 'success'
+                                        });
+
+                                    } else if (response.status == "loginerr") {
+                                        app.toast('You are not authorized, Please login', {
+                                            actionTitle: 'Login Error',
+                                            actionUrl: '<?=base_url('/')?>',
+                                            actionColor: 'danger'
+                                        });
+
+                                    } else {
+                                        app.toast('Failed to update label', {
+                                            actionTitle: 'Failed',
+
+                                            actionColor: 'danger'
+                                        });
+                                    }
+
+
+                                }
+                            })
+                        }
+                        else{
+                            app.toast('Please enter valid label', {
+                                actionTitle: 'Validation',
+                                actionColor: 'info'
+                            });
+                        }
+                    }
+                    
                 })
             })
 
@@ -709,6 +762,65 @@
 
                                 } else {
                                     app.toast('Failed to update status', {
+                                        actionTitle: 'Failed',
+                                        actionColor: 'danger'
+                                    });
+                                }
+                                window.location.reload()
+
+
+                            }
+                        })
+                    }
+                })
+            })
+
+            
+        </script>
+	<?php endif; ?>
+	<?php if ($this->router->method === 'add_task'): ?>
+        <script>
+            $(document).ready(() => {
+                $('.repeater').repeater({
+                    isFirstItemUndeletable: true
+                })
+                $("#save").click((e) => {
+                    const repTask = $('.repeater').repeaterVal();
+                    let tasks = [];
+                    $.each(repTask.task_list,(i,v)=>{
+                        if(v.task!==""){
+                            tasks.push(v.task)
+                        }
+                    })
+                  
+                    if (tasks.length  == 0) {
+                        app.toast('Tasks cannot be empty', {
+                            actionTitle: 'Failed',
+                            actionColor: 'danger'
+                        });
+                       
+                    } else {
+                        $(".preloader ").css('display', '');
+                        $.ajax({
+                            url: `<?=base_url('save-task')?>`,
+                            type: 'POST',
+                            data: {
+                                class: $("#class").val() ,
+                                student: $("#student").val() ,
+                                cohort: $("#cohort").val() ,
+                                completion_level: $("#completion_level").val() ,
+                                tasks: tasks
+                            },
+                            success: function (response) {
+                                response = JSON.parse(response);
+                                $(".preloader ").css('display', 'none');
+                                if (response.status == "success") {
+                                    app.toast('Successfully added task', {
+                                        actionColor: 'success'
+                                    });
+
+                                } else {
+                                    app.toast('Failed to add task', {
                                         actionTitle: 'Failed',
                                         actionColor: 'danger'
                                     });

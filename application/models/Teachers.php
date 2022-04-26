@@ -193,5 +193,74 @@
 		}
 		
 		
-	
+		public function save_task($data)
+		{
+			try{
+				$this->db->insert('tbl_tasks', $data);
+				return  $this->db->insert_id();
+			}
+			catch (Exception $ex){
+				return  false;
+			}
+		}
+		
+		public function update_board_labels($data,$cohort)
+		{
+			try{
+				
+				$this->db->select('*');
+				$this->db->where([
+					'cohort_id' => trim($cohort),
+				]);
+				$this->db->from('tbl_board_labels');
+				$this->db->limit(1);
+				$query = $this->db->get();
+				//$this->db->close();
+				$result= $query->row();
+				if(!empty($result)){
+					$labels = json_decode($result->labels_string,true);
+					foreach ($data as $k => $v){
+						$labels[$k] = $v;
+					}
+					
+					$this->db->set([
+						'labels_string'=>json_encode($labels),
+					]);
+					$this->db->where('id', $result->id);
+					$this->db->update('tbl_board_labels');
+					
+				}
+				else{
+					$ins_data= [
+						'labels_string'=>json_encode($data),
+						'cohort_id'=>$cohort,
+					];
+					$this->db->insert('tbl_board_labels', $ins_data);
+				}
+				return true;
+			}
+			catch (Exception $ex){
+				return false;
+			}
+		}
+		public function get_board_labels($cohort)
+		{
+			try{
+				
+				$this->db->select('*');
+				$this->db->where([
+					'cohort_id' => trim($cohort),
+				]);
+				$this->db->from('tbl_board_labels');
+				$this->db->limit(1);
+				$query = $this->db->get();
+				//$this->db->close();
+				return $query->row();
+				
+				e;
+			}
+			catch (Exception $ex){
+				return [];
+			}
+		}
 	}

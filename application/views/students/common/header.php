@@ -899,14 +899,22 @@
         }
     </style>
 	<?php if ($this->router->method === 'library'): ?>
-        <script>
-            function resizeIframe(obj) {
-                console.log(obj)
-                //obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+        <style>
+            iframe #changed_code_text{
+                height: 500px !important;
+                background: red;
+                overflow: scroll;
             }
-
-        </script>
+        </style>
+        
 	<?php endif; ?>
+    <script>
+        function resizeIframe(obj) {
+            console.log(obj)
+          //  obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+        }
+
+    </script>
 </head>
 
 <body>
@@ -941,6 +949,14 @@
                         <span class="title">Library of books</span>
                     </a>
                 </li>
+                <?php if(false): ?>
+                    <li class="menu-item">
+                        <a class="menu-link"  href="<?=base_url('e-learning')?>">
+                            <span class="icon fa fa-book"></span>
+                            <span class="title">E-Learning</span>
+                        </a>
+                    </li>
+                <?php endif; ?>
 	            <?php if ($this->session->has_userdata('logged_in')) : ?>
                     <li class="menu-item">
                         <a class="menu-link" href="<?= base_url('students') ?>">
@@ -983,6 +999,12 @@
                     <a class="menu-link notepad-title" href="<?=base_url('class-work')?>">
                         <span class="icon fa fa-pencil"></span>
                         <span class="title ">Class Work</span>
+                    </a>
+                </li>
+                <li class="dropdown">
+                    <a class="menu-link notepad-title" href="<?=base_url('tasks')?>">
+                        <span class="icon fa fa-pencil"></span>
+                        <span class="title ">Tasks</span>
                     </a>
                 </li>
 			

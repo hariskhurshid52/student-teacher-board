@@ -940,6 +940,13 @@
                     </a>
 
                 </li>
+                <li class="menu-item">
+                    <a class="menu-link"  href="<?=base_url('add-tasks')?>">
+                        <span class="icon fa fa-plus"></span>
+                        <span class="title">Add Task</span>
+                    </a>
+
+                </li>
             </ul>
         </nav>
     </div>

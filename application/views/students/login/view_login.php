@@ -105,7 +105,7 @@
             <br>
         </h1>
         <h1 class="third-heading">
-            All the informations in one place.
+            All the information in one place.
 
         </h1>
         <h2 class="fourth-heading">
@@ -279,7 +279,7 @@
         app.modaler({
             url: `<?=base_url('student-reg-content')?>?redirect=login`,
             type: 'center',
-            size: 'w-80',
+            size: 'lg',
             title: 'Student Registration',
             confirmVisible: false,
             onCancel: function (modal) {
