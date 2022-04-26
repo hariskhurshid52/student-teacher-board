@@ -88,6 +88,9 @@
 		$route['add-tasks'] = 'teacher/add_task';
 		$route['save-task'] = 'teacher/save_task';
 		
+		$route['teacher/registration'] = 'teacher/teacher_registration';
+		$route['task-list-content'] = 'teacher/task_list_content';
+		
 		
 		
 		

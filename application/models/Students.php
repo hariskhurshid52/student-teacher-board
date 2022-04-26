@@ -279,4 +279,22 @@
 				return [];
 			}
 		}
+		
+		public function get_teacher_students_list($order)
+		{
+			try {
+				$this->db->select('tbl_students.*,tbl_classes.name class_name,tbl_cohorts.cohort_name cohort_name');
+				$this->db->from('tbl_students');
+				$this->db->join('tbl_classes', 'tbl_classes.id = tbl_students.class_id', 'left');
+				$this->db->join('tbl_cohorts', 'tbl_cohorts.id = tbl_students.cohort', 'left');
+				$this->db->where([
+					'tbl_cohorts.teacher_id'=>$this->session->userdata['logged_in']['user_id']
+				]);
+				$this->db->order_by('added_date', $order);
+				$query = $this->db->get();
+				return $query->result_array();
+			} catch (Exception $exception) {
+				return false;
+			}
+		}
 	}

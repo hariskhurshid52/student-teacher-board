@@ -949,14 +949,14 @@
                         <span class="title">Library of books</span>
                     </a>
                 </li>
-                <?php if(false): ?>
+               
                     <li class="menu-item">
-                        <a class="menu-link"  href="<?=base_url('e-learning')?>">
+                        <a class="menu-link" target="_blank"  href="http://learning.amasomo.com/">
                             <span class="icon fa fa-book"></span>
-                            <span class="title">E-Learning</span>
+                            <span class="title"><?=$this->lang->line('e-learning')?></span>
                         </a>
                     </li>
-                <?php endif; ?>
+                
 	            <?php if ($this->session->has_userdata('logged_in')) : ?>
                     <li class="menu-item">
                         <a class="menu-link" href="<?= base_url('students') ?>">

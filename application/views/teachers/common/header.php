@@ -19,7 +19,9 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,300i" rel="stylesheet">
-
+	<?php if ($this->router->method === 'students'): ?>
+        <link  rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+	<?php endif; ?>
     <!-- Styles -->
     <link href="<?= base_url() ?>/assets/theme/assets/css/core.min.css" rel="stylesheet">
     <link href="<?= base_url() ?>/assets/theme/assets/css/app.min.css" rel="stylesheet">
@@ -45,6 +47,7 @@
     <meta name="msapplication-TileImage" content="<?= base_url() ?>/assets/img/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff"
     <link rel="stylesheet" href="<?= base_url() ?>/assets/css/simplemde.min.css"/>
+	
     <style>
         /**
 * simplemde v1.11.2
@@ -853,7 +856,16 @@
                     </a>
 
                 </li>
-                
+                <li class="menu-item active open">
+                    <div class="btn-group mt-3">
+                        <button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown"><i class="icon ti-settings"></i> Dropdown</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </li>
                 <li class="menu-item active open">
                     <a class="menu-link" href="#">
                         <span class="icon ti-user"></span>

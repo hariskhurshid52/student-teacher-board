@@ -18,63 +18,68 @@
 		
 		public function board()
 		{
-			$data = [];
-			$this->load->model('students');
-			$publications = $this->students->get_last_published_all_data();
-			if (count($publications) > 0) {
-				$data['last_pub'] = $publications[0];
-				if (!isset($data['cache'])) {
-					$data['cache'] = [
-						'weekly_lessons' => [
-							'url' => $publications[0]['weekly_lessons_booking_url'],
-							'beginner_students' => $publications[0]['weekly_lessons_beginner_students'],
-							'advance_students' => $publications[0]['weekly_lessons_advance_students'],
-							'announcements' => $publications[0]['weekly_lessons_announcements'],
-							'doc_weekly_lessons' => $publications[0]['doc_weekly_lessons'],
-						],
-						'weekly_tasks' => [
-							'beginner_students' => $publications[0]['weekly_tasks_beginner_students'],
-							'advance_students' => $publications[0]['weekly_tasks_advance_students'],
-							'announcements' => $publications[0]['weekly_tasks_announcements'],
-							'doc_weekly_tasks' => $publications[0]['doc_weekly_tasks'],
-						],
-						'group_work' => [
-							'url' => $publications[0]['group_work_booking_url'],
-							'work_title' => $publications[0]['group_work_title'],
-							'work_description' => $publications[0]['group_work_description'],
-							'weekly_work' => $publications[0]['group_work_weekly_work'],
-							'doc_group_work' => $publications[0]['doc_group_work'],
-						],
-						'group_activity' => [
-							'work_title' => $publications[0]['activity_title'],
-							'work_description' => $publications[0]['activity_description'],
-							'doc_group_activity' => $publications[0]['doc_group_activity'],
-						
-						],
-					];
+			if($this->session->has_userdata('logged_in')){
+				$data = [];
+				$this->load->model('students');
+				$publications = $this->students->get_last_published_all_data();
+				if (count($publications) > 0) {
+					$data['last_pub'] = $publications[0];
+					if (!isset($data['cache'])) {
+						$data['cache'] = [
+							'weekly_lessons' => [
+								'url' => $publications[0]['weekly_lessons_booking_url'],
+								'beginner_students' => $publications[0]['weekly_lessons_beginner_students'],
+								'advance_students' => $publications[0]['weekly_lessons_advance_students'],
+								'announcements' => $publications[0]['weekly_lessons_announcements'],
+								'doc_weekly_lessons' => $publications[0]['doc_weekly_lessons'],
+							],
+							'weekly_tasks' => [
+								'beginner_students' => $publications[0]['weekly_tasks_beginner_students'],
+								'advance_students' => $publications[0]['weekly_tasks_advance_students'],
+								'announcements' => $publications[0]['weekly_tasks_announcements'],
+								'doc_weekly_tasks' => $publications[0]['doc_weekly_tasks'],
+							],
+							'group_work' => [
+								'url' => $publications[0]['group_work_booking_url'],
+								'work_title' => $publications[0]['group_work_title'],
+								'work_description' => $publications[0]['group_work_description'],
+								'weekly_work' => $publications[0]['group_work_weekly_work'],
+								'doc_group_work' => $publications[0]['doc_group_work'],
+							],
+							'group_activity' => [
+								'work_title' => $publications[0]['activity_title'],
+								'work_description' => $publications[0]['activity_description'],
+								'doc_group_activity' => $publications[0]['doc_group_activity'],
+							
+							],
+						];
+					}
 				}
-			}
-			
-			if ($this->session->has_userdata('logged_in')) {
-				$note_pad_details = $this->students->get_last_updated_notepad($this->session->userdata['logged_in']['user_id']);
-				if (count($note_pad_details) > 0) {
-					$data['note_pad'] = $note_pad_details[0];
-					$this->session->set_userdata('updated_notepad', $data['note_pad']['id']);
+				
+				if ($this->session->has_userdata('logged_in')) {
+					$note_pad_details = $this->students->get_last_updated_notepad($this->session->userdata['logged_in']['user_id']);
+					if (count($note_pad_details) > 0) {
+						$data['note_pad'] = $note_pad_details[0];
+						$this->session->set_userdata('updated_notepad', $data['note_pad']['id']);
+					}
+				}else{
+					redirect('https://student.amasomo.com/login');
 				}
-			}else{
-				redirect('https://student.amasomo.com/login');
+				
+				
+				$labels = $this->students->get_board_labels();
+				if(!empty($labels)){
+					$data['board_labels'] = json_decode($labels->labels_string,true);
+				}
+				
+				
+				$this->load->view('students/common/header', $data);
+				$this->load->view('students/home/view_main_board');
+				$this->load->view('students/common/footer');
 			}
-			
-			
-			$labels = $this->students->get_board_labels();
-			if(!empty($labels)){
-				$data['board_labels'] = json_decode($labels->labels_string,true);
+			else{
+				redirect('login');
 			}
-			
-			
-			$this->load->view('students/common/header', $data);
-			$this->load->view('students/home/view_main_board');
-			$this->load->view('students/common/footer');
 			
 		}
 		
@@ -99,6 +104,7 @@
 			$class = $this->session->userdata['logged_in']['class_id'];
 			$cohort = $this->session->userdata['logged_in']['cohort'];
 			$student = $this->session->userdata['logged_in']['user_id'];
+			
 			$data['tasks'] = $this->students->get_all_assigned_tasks($class,$cohort,$student);
 			
 			$completed_tasks_list = $this->students->get_all_completed_tasks();
@@ -196,7 +202,13 @@
 						$this->load->model('students');
 						$response = $this->students->validate_login($inputs['username'], $inputs['password']);
 						
+						
 						if (count($response) == 1) {
+							$update_data = [
+								'last_login' => date('Y-m-d\Th:i:s.v\Z', strtotime('now')),
+							];
+							$this->students->update_student($update_data, $response[0]['id']);
+							
 							$this->session->set_userdata('logged_in', [
 								'user_id' => $response[0]['id'],
 								'name' => "{$response[0]['name']}",

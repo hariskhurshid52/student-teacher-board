@@ -28,6 +28,22 @@
 				return [];
 			}
 		}
+		public function get_all_teacher_cohort()
+		{
+			try {
+				$this->db->select('*');
+				$this->db->where([
+					'teacher_id' => $this->session->userdata['logged_in']['user_id'],
+				]);
+				$this->db->order_by('id', 'ASC');
+				$this->db->from('tbl_cohorts');
+				
+				$query = $this->db->get();
+				return $query->result_array();
+			} catch (Exception $ex) {
+				return [];
+			}
+		}
 		public function get_cohort_by_id($id)
 		{
 			try {
