@@ -1012,7 +1012,7 @@
                 <li class="dropdown">
                     <a class="menu-link" href="<?= base_url('login') ?>" data-target="#modal-notepad">
                         <span class="icon fa fa-user"></span>
-                        <span class="title">LOGIN</span>
+                        <span class="title"><?=$this->lang->line('login')?></span>
                     </a>
                 </li>
 			<?php endif; ?>

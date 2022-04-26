@@ -5,6 +5,7 @@
 	{
 		public $app_name;
 		public $app_title;
+		public $DEFAULT_LANG;
 		
 		public function __construct()
 		{
@@ -30,6 +31,19 @@
 				redirect('/');
 				
 			}
+			
+			
+			
+			
+			$this->DEFAULT_LANG = "english";
+			if (isset($_COOKIE['lang']) && !empty($_COOKIE['lang'])) {
+				$this->DEFAULT_LANG = base64_decode($_COOKIE['lang']);
+			}
+			if (!empty($this->session->userdata['logged_in']['preferences']['lang'])) {
+				$this->DEFAULT_LANG = $this->session->userdata['logged_in']['preferences']['lang'];
+			}
+			
+			$this->lang->load('default', $this->DEFAULT_LANG);
 			
 		}
 		
