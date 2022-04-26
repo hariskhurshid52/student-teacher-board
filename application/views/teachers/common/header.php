@@ -849,7 +849,7 @@
                 <li class="menu-item">
                     <a class="menu-link" href="<?= base_url('/') ?>">
                         <span class="icon fa fa-home"></span>
-                        <span class="title">Dashboard</span>
+                        <span class="title"><?= $this->lang->line('title-dashboard')?></span>
                     </a>
 
                 </li>
@@ -857,7 +857,7 @@
                 <li class="menu-item active open">
                     <a class="menu-link" href="#">
                         <span class="icon ti-user"></span>
-                        <span class="title">Students</span>
+                        <span class="title"><?= $this->lang->line('title-students')?></span>
                         <span class="arrow"></span>
                     </a>
 
@@ -865,13 +865,13 @@
                         <li class="menu-item">
                             <a class="menu-link" href="<?= base_url('students') ?>">
                                 <span class="icon fa fa-list"></span>
-                                <span class="title">List</span>
+                                <span class="title"><?= $this->lang->line('title-list')?></span>
                             </a>
                         </li>
                         <li class="menu-item">
                             <a class="menu-link" id="new-student" href="#!">
                                 <span class="icon fa fa-plus"></span>
-                                <span class="title">Register</span>
+                                <span class="title">R<?= $this->lang->line('title-register')?>egister</span>
                             </a>
                         </li>
 
@@ -881,7 +881,7 @@
                 <li class="menu-item active open">
                     <a class="menu-link" href="#">
                         <span class="icon ti-info"></span>
-                        <span class="title">Classes</span>
+                        <span class="title"><?= $this->lang->line('title-class')?></span>
                         <span class="arrow"></span>
                     </a>
 
@@ -889,13 +889,13 @@
                         <li class="menu-item">
                             <a class="menu-link" href="<?= base_url('classes') ?>">
                                 <span class="icon fa fa-list"></span>
-                                <span class="title">List</span>
+                                <span class="title"><?= $this->lang->line('title-list')?></span>
                             </a>
                         </li>
                         <li class="menu-item">
                             <a class="menu-link" id="new-class" href="#!" onclick="addUpdateClass()">
                                 <span class="icon fa fa-plus"></span>
-                                <span class="title">Register</span>
+                                <span class="title"><?= $this->lang->line('title-register')?></span>
                             </a>
                         </li>
 
@@ -905,7 +905,7 @@
                 <li class="menu-item active open">
                     <a class="menu-link" href="#">
                         <span class="icon ti-info"></span>
-                        <span class="title">Cohort</span>
+                        <span class="title"><?= $this->lang->line('title-cohort')?></span>
                         <span class="arrow"></span>
                     </a>
 
@@ -913,13 +913,13 @@
                         <li class="menu-item">
                             <a class="menu-link" href="<?= base_url('cohort') ?>">
                                 <span class="icon fa fa-list"></span>
-                                <span class="title">List</span>
+                                <span class="title"><?= $this->lang->line('title-list')?></span>
                             </a>
                         </li>
                         <li class="menu-item">
                             <a class="menu-link" id="new-class" href="#!" onclick="addUpdateCohort()">
                                 <span class="icon fa fa-plus"></span>
-                                <span class="title">Add New</span>
+                                <span class="title"><?= $this->lang->line('title-add-new')?></span>
                             </a>
                         </li>
 
@@ -929,21 +929,21 @@
                 <li class="menu-item">
                     <a class="menu-link"  href="<?=base_url('upload-book')?>">
                         <span class="icon fa fa-upload"></span>
-                        <span class="title">Upload Book</span>
+                        <span class="title"><?= $this->lang->line('title-upload-book')?></span>
                     </a>
 
                 </li>
                 <li class="menu-item">
                     <a class="menu-link"  href="<?=base_url('upload-class-work')?>">
                         <span class="icon fa fa-upload"></span>
-                        <span class="title">Upload Class Work</span>
+                        <span class="title"><?= $this->lang->line('title-upload-cw')?></span>
                     </a>
 
                 </li>
                 <li class="menu-item">
                     <a class="menu-link"  href="<?=base_url('add-tasks')?>">
                         <span class="icon fa fa-plus"></span>
-                        <span class="title">Add Task</span>
+                        <span class="title"><?= $this->lang->line('title-add-task')?></span>
                     </a>
 
                 </li>
@@ -962,7 +962,7 @@
                                 class="ti-user"></i> <?= $this->session->userdata['logged_in']['name'] ?></p>
 
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="<?= base_url('logout') ?>"><i class="ti-power-off"></i> Logout</a>
+                    <a class="dropdown-item" href="<?= base_url('logout') ?>"><i class="ti-power-off"></i><?= $this->lang->line('logout')?></a>
                 </div>
             </li>
 
