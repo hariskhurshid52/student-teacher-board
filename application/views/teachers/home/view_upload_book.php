@@ -16,8 +16,8 @@
     color: #fff;
     font-size: 29px;
     padding: 10px 20px 10px 20px;opacity: 1">
-				<strong class="color-white">Kinyarwanda</strong> Proficiency Program Cohort S’2022
-				<small class="color-white"  style="opacity: 1">Gusoma Education - School of Kinyarwanda</small>
+				<strong class="color-white"><?= $this->lang->line('title')?>
+				<small class="color-white"  style="opacity: 1"><?= $this->lang->line('sub-title')?></small>
 				<?php if (isset($last_pub)): ?>
 					<small class="pull-right color-white" style=" color: #fff;;">
 						<b class="color-white">Last Updated :</b> <i

@@ -940,20 +940,20 @@
                 <li class="menu-item">
                     <a class="menu-link" href="<?= base_url('/') ?>">
                         <span class="icon fa fa-home"></span>
-                        <span class="title">Dashboard</span>
+                        <span class="title"><?= $this->lang->line('title-dashboard')?></span>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a class="menu-link"  href="<?=base_url('library')?>">
                         <span class="icon fa fa-book"></span>
-                        <span class="title">Library of books</span>
+                        <span class="title"><?= $this->lang->line('title-library')?></span>
                     </a>
                 </li>
                 <?php if(false): ?>
                     <li class="menu-item">
                         <a class="menu-link"  href="<?=base_url('e-learning')?>">
                             <span class="icon fa fa-book"></span>
-                            <span class="title">E-Learning</span>
+                            <span class="title"><?= $this->lang->line('title-e-learning')?></span>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -961,7 +961,7 @@
                     <li class="menu-item">
                         <a class="menu-link" href="<?= base_url('students') ?>">
                             <span class="icon fa fa-users"></span>
-                            <span class="title">Students</span>
+                            <span class="title"><?= $this->lang->line('title-students')?></span>
                         </a>
                     </li>
 	            <?php endif; ?>
@@ -982,29 +982,29 @@
                                     class="ti-user"></i> <?= $this->session->userdata['logged_in']['name'] ?></p>
                         <a class="menu-link notepad-title edit-profile" href="#">
                             <span class="ti-pencil"></span>
-                            <span class="title ">Edit Profile</span>
+                            <span class="title "><?= $this->lang->line('title-edit-profile')?></span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="<?= base_url('logout') ?>"><i class="ti-power-off"></i>
-                            Logout</a>
+							<?= $this->lang->line('dropdown-logout')?>  </a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a class="menu-link notepad-title" data-toggle="dock" href="#" data-target="#modal-notepad">
                         <span class="icon fa fa-pencil"></span>
-                        <span class="title ">NOTEPAD</span>
+                        <span class="title "><?= $this->lang->line('dropdown-note')?></span>
                     </a>
                 </li>
                 <li class="dropdown">
                     <a class="menu-link notepad-title" href="<?=base_url('class-work')?>">
                         <span class="icon fa fa-pencil"></span>
-                        <span class="title ">Class Work</span>
+                        <span class="title "><?= $this->lang->line('dropdown-work')?></span>
                     </a>
                 </li>
                 <li class="dropdown">
                     <a class="menu-link notepad-title" href="<?=base_url('tasks')?>">
                         <span class="icon fa fa-pencil"></span>
-                        <span class="title ">Tasks</span>
+                        <span class="title "><?= $this->lang->line('dropdown-task')?></span>
                     </a>
                 </li>
 			
@@ -1056,9 +1056,9 @@
         <div class="dock-footer">
             
             <button type="button" class="btn btn-bold btn-pure btn-primary border"
-                    onclick="save_notepad()">Save changes
+                    onclick="save_notepad()"><?= $this->lang->line('save-changes')?>
             </button>
-            <button type="button" class="btn btn-bold btn-pure btn-info border sub-modal" component="email" section="notepad" title="Send Email" >Send Email
+            <button type="button" class="btn btn-bold btn-pure btn-info border sub-modal" component="email" section="notepad" title="Send Email" >><?= $this->lang->line('send-email')?>
             </button>
         </div>
     </div>
